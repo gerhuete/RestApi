@@ -9,14 +9,8 @@ const userSchema = mongoose.Schema({
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
     password: { type: String, required: true },
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 1,
-      maxlength: 50
-    },
-    posts: [{ type: ObjectId, ref: 'Post' }]
+    name: { type: String },
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 });
 
 module.exports = mongoose.model('User', userSchema);

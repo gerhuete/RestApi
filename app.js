@@ -4,9 +4,12 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+const userRoutes = require('./api/routes/user');
+
 mongoose.connect(process.env.DB_URI, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  useCreateIndex: true
 })
 .then(() => console.log('DB Connected!'))
 .catch(err => {
@@ -30,6 +33,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use("/user", userRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
