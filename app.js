@@ -2,8 +2,17 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
-const userRoutes = require("./api/routes/user");
+mongoose.connect(process.env.DB_URI, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+})
+.then(() => console.log('DB Connected!'))
+.catch(err => {
+  console.log(`DB Connection Error: ${err.message}`);
+});
+mongoose.Promise = global.Promise;
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,9 +30,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-// Routes which should handle requests
-app.use("/user", userRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
