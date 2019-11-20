@@ -4,7 +4,7 @@ const Post = require("../models/post");
 const User = require("../models/user");
 
 exports.get_posts = (req, res, next) => {
-  Post.find()
+  Post.find({ 'creator': req.userData.userId })
     .select("_id title imageUrl content creator")
     .populate("creator", "_id")
     .exec()
