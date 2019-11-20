@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
+const Post = require("../models/post");
 
 exports.user_signup = (req, res, next) => {
     User.find({ email: req.body.email })
@@ -88,3 +89,19 @@ exports.user_signin = (req, res, next) => {
       });
     });
 };
+
+exports.user_updatePosts = (userId) => {
+  Post.find({ 'creator': userId }, '_id', function (err, docs) {
+    if(err) {
+      console.log('User posts could not be saved');
+    }   
+    User.updateOne({ _id: userId }, { $set: { posts: docs } })
+      .exec()
+      .then(result => {
+        console.log('user posts saved');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+}

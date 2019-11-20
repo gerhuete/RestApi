@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const Post = require("../models/post");
 const User = require("../models/user");
 
+const UserController = require("./user");
+
 exports.get_posts = (req, res, next) => {
   Post.find({ 'creator': req.userData.userId })
     .select("_id title imageUrl content creator")
@@ -51,7 +53,7 @@ exports.create_post = (req, res, next) => {
       return post.save();
     })
     .then(result => {
-      console.log(result);
+      UserController.user_updatePosts(req.userData.userId);
       res.status(201).json({
         message: "Post succesfully created",
         createdPost: {
@@ -108,7 +110,7 @@ exports.edit_post = (req, res, next) => {
     updateOps[key] = value;
   }
 
-  Post.update({ _id: postId }, { $set: updateOps })
+  Post.updateOne({ _id: postId }, { $set: updateOps })
     .exec()
     .then(result => {
       res.status(200).json({
@@ -131,6 +133,7 @@ exports.delete_post = (req, res, next) => {
   Post.remove({ _id: req.params.postId })
     .exec()
     .then(result => {
+      UserController.user_updatePosts(req.userData.userId);
       res.status(200).json({
         message: "Post deleted",
         request: {
