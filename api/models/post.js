@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-require('mongoose-type-url');
 
 const postSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -8,7 +7,7 @@ const postSchema = mongoose.Schema({
       required: true,
       trim: true,
       minlength: 1,
-      maxlength: 100
+      maxlength: 200
     },
     imageUrl: { 
     	type: String,
@@ -19,7 +18,7 @@ const postSchema = mongoose.Schema({
       required: true,
       trim: true,
       minlength: 1,
-      maxlength: 500
+      maxlength: 2000
     },
     creator: {
         type: mongoose.Schema.Types.ObjectId,
